@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chef July - הרשמה</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <img src="/assets/gifs/idle.gif" alt="Chef July" class="auth-gif" onerror="this.style.display='none'">
+        <h1>Chef July</h1>
+        <h2>צור חשבון חדש</h2>
+      </div>
+
+      <form id="signupForm" class="auth-form">
+        <div class="form-group">
+          <label for="username">שם משתמש</label>
+          <input type="text" id="username" name="username" required
+                 minlength="3" maxlength="20" placeholder="3-20 תווים">
+          <span class="field-error" id="usernameError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">אימייל</label>
+          <input type="email" id="email" name="email" required
+                 placeholder="example@mail.com">
+          <span class="field-error" id="emailError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="password">סיסמה</label>
+          <input type="password" id="password" name="password" required
+                 minlength="6" placeholder="לפחות 6 תווים">
+          <span class="field-error" id="passwordError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">אישור סיסמה</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required
+                 placeholder="הקלד שוב את הסיסמה">
+          <span class="field-error" id="confirmPasswordError"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">צור חשבון</button>
+      </form>
+
+      <p class="auth-switch">יש לי חשבון <a href="/login">התחבר</a></p>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

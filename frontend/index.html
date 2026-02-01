@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chef July - המתכון המושלם שלך</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+  <div class="landing-container">
+    <div class="landing-content">
+      <div class="logo-section">
+        <img src="/assets/gifs/idle.gif" alt="Chef July" class="landing-gif" onerror="this.style.display='none'">
+        <h1 class="logo-text">Chef July</h1>
+      </div>
+
+      <h2 class="landing-title">המתכון המושלם שלך, ברגע</h2>
+      <p class="landing-subtitle">בינה מלאכותית שיוצרת מתכונים מותאמים אישית</p>
+
+      <div class="landing-buttons">
+        <a href="/signup" class="btn btn-primary btn-large">התחל עכשיו</a>
+        <p class="landing-link">כבר רשום? <a href="/login">התחבר</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    // If already logged in, redirect to home
+    (async () => {
+      try {
+        const data = await callAPI('/auth/me');
+        if (data && data.success) {
+          window.location.href = '/home';
+        }
+      } catch (e) {
+        // Not logged in, stay on landing
+      }
+    })();
+  </script>
+</body>
+</html>
