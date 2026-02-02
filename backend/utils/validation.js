@@ -1,6 +1,15 @@
 const { ValidationError } = require('./errors');
 
+// Sanitize string input - trim and limit length
+function sanitize(str, maxLength = 500) {
+  if (typeof str !== 'string') return '';
+  return str.trim().slice(0, maxLength);
+}
+
 function validateSignup(username, email, password, confirmPassword) {
+  username = sanitize(username, 20);
+  email = sanitize(email, 100);
+
   if (!username || !email || !password || !confirmPassword) {
     throw new ValidationError('fields', 'כל השדות הם חובה');
   }
@@ -18,19 +27,23 @@ function validateSignup(username, email, password, confirmPassword) {
     throw new ValidationError('email', 'כתובת אימייל לא תקינה');
   }
 
-  if (password.length < 6) {
-    throw new ValidationError('password', 'סיסמה חייבת להכיל לפחות 6 תווים');
+  if (password.length < 6 || password.length > 128) {
+    throw new ValidationError('password', 'סיסמה חייבת להכיל בין 6 ל-128 תווים');
   }
 
   if (password !== confirmPassword) {
     throw new ValidationError('confirmPassword', 'הסיסמאות אינן תואמות');
   }
+
+  return { username, email };
 }
 
 function validateLogin(identifier, password) {
   if (!identifier || !password) {
     throw new ValidationError('fields', 'כל השדות הם חובה');
   }
+
+  return { identifier: sanitize(identifier, 100) };
 }
 
-module.exports = { validateSignup, validateLogin };
+module.exports = { validateSignup, validateLogin, sanitize };
