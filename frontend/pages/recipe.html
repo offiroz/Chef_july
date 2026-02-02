@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chef July - מתכון</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+  <div class="recipe-page">
+    <!-- Header -->
+    <header class="recipe-header">
+      <a href="/home" class="back-btn">&larr; חזרה</a>
+      <h1>Chef July</h1>
+    </header>
+
+    <!-- Step 1: Preferences Form -->
+    <section id="preferences-section" class="recipe-section">
+      <h2>מה בא לך היום?</h2>
+      <p class="section-subtitle">התאם את המתכון להעדפות שלך, או דלג לקבלת מתכון מפתיע</p>
+
+      <form id="preferences-form" class="preferences-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="mealType">סוג ארוחה</label>
+            <select id="mealType" name="mealType">
+              <option value="ארוחה">כללי</option>
+              <option value="ארוחת בוקר">ארוחת בוקר</option>
+              <option value="ארוחת צהריים">ארוחת צהריים</option>
+              <option value="ארוחת ערב">ארוחת ערב</option>
+              <option value="חטיף">חטיף</option>
+              <option value="קינוח">קינוח</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="difficulty">רמת קושי</label>
+            <select id="difficulty" name="difficulty">
+              <option value="קל">קל</option>
+              <option value="בינוני">בינוני</option>
+              <option value="מאתגר">מאתגר</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="maxTime">זמן מקסימלי (דקות)</label>
+            <input type="range" id="maxTime" name="maxTime" min="15" max="120" value="45" oninput="document.getElementById('timeDisplay').textContent = this.value">
+            <span id="timeDisplay" class="range-value">45</span>
+          </div>
+
+          <div class="form-group">
+            <label for="servings">מספר מנות</label>
+            <input type="number" id="servings" name="servings" min="1" max="20" value="4">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="dietary">העדפות תזונה</label>
+          <select id="dietary" name="dietary">
+            <option value="">ללא העדפה</option>
+            <option value="צמחוני">צמחוני</option>
+            <option value="טבעוני">טבעוני</option>
+            <option value="ללא גלוטן">ללא גלוטן</option>
+            <option value="דל פחמימות">דל פחמימות</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="ingredients">מרכיבים שחובה להכיל</label>
+          <input type="text" id="ingredients" name="ingredients" placeholder="לדוגמה: עוף, אורז, לימון">
+        </div>
+
+        <div class="form-group">
+          <label for="exclude">מרכיבים לא רצויים</label>
+          <input type="text" id="exclude" name="exclude" placeholder="לדוגמה: בצל, שום">
+        </div>
+
+        <div class="form-buttons">
+          <button type="submit" class="btn btn-primary btn-full">צור מתכון</button>
+          <button type="button" id="skip-btn" class="btn btn-secondary btn-full">הפתע אותי!</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Step 2: Loading State -->
+    <section id="loading-section" class="recipe-section hidden">
+      <div class="loading-container">
+        <img src="/assets/gifs/loading.gif" alt="טוען..." class="loading-gif" onerror="this.style.display='none'">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">מכין לך משהו טעים...</p>
+      </div>
+    </section>
+
+    <!-- Step 3: Recipe Display -->
+    <section id="recipe-section" class="recipe-section hidden">
+      <div class="recipe-success-gif">
+        <img src="/assets/gifs/success.gif" alt="הצלחה!" class="success-gif" onerror="this.style.display='none'">
+      </div>
+
+      <div class="recipe-card">
+        <h2 id="recipe-title" class="recipe-title"></h2>
+        <p id="recipe-description" class="recipe-description"></p>
+
+        <div class="recipe-tags">
+          <span id="tag-difficulty" class="tag"></span>
+          <span id="tag-time" class="tag"></span>
+          <span id="tag-servings" class="tag"></span>
+        </div>
+
+        <!-- Ingredients -->
+        <div class="recipe-block">
+          <h3>מצרכים</h3>
+          <ul id="ingredients-list" class="ingredients-list"></ul>
+        </div>
+
+        <!-- Instructions -->
+        <div class="recipe-block">
+          <h3>הוראות הכנה</h3>
+          <ol id="instructions-list" class="instructions-list"></ol>
+        </div>
+
+        <!-- Tips -->
+        <div id="tips-block" class="recipe-block">
+          <h3>טיפים</h3>
+          <ul id="tips-list" class="tips-list"></ul>
+        </div>
+
+        <!-- Nutrition -->
+        <div id="nutrition-block" class="recipe-block">
+          <h3>ערכים תזונתיים (ל-100 גרם)</h3>
+          <div id="nutrition-grid" class="nutrition-grid"></div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="recipe-actions">
+        <button id="save-btn" class="btn btn-primary">שמור מתכון</button>
+        <button id="rate-btn" class="btn btn-secondary">דרג מתכון</button>
+        <button id="new-recipe-btn" class="btn btn-outline">קבל מתכון אחר</button>
+      </div>
+    </section>
+
+    <!-- Rating Modal -->
+    <div id="rating-modal" class="modal hidden">
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <h3>איך היה המתכון?</h3>
+        <div class="stars-container" id="stars-container">
+          <span class="star" data-value="1">&#9733;</span>
+          <span class="star" data-value="2">&#9733;</span>
+          <span class="star" data-value="3">&#9733;</span>
+          <span class="star" data-value="4">&#9733;</span>
+          <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <textarea id="rating-comment" placeholder="רוצה לשתף פידבק? (אופציונלי)" rows="3"></textarea>
+        <div class="modal-buttons">
+          <button id="submit-rating-btn" class="btn btn-primary" disabled>שלח דירוג</button>
+          <button id="cancel-rating-btn" class="btn btn-secondary">ביטול</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/recipe.js"></script>
+</body>
+</html>
