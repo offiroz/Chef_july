@@ -62,6 +62,10 @@ app.get('/recipe', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'pages', 'recipe.html'));
 });
 
+app.get('/saved', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'pages', 'saved.html'));
+});
+
 // Error handling
 app.use('/api/*', notFoundHandler);
 app.use(errorHandler);

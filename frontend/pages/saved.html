@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chef July - מתכונים שמורים</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+  <div class="saved-page">
+    <header class="page-header">
+      <a href="/home" class="back-btn">&larr; חזרה</a>
+      <h1>המתכונים שלי</h1>
+    </header>
+
+    <!-- Loading State -->
+    <div id="loading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">טוען מתכונים...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="empty-state hidden">
+      <div class="empty-icon">&#9733;</div>
+      <h2>עדיין לא שמרת מתכונים</h2>
+      <p>כשתמצא מתכון שאהבת, שמור אותו וימצא כאן</p>
+      <a href="/recipe" class="btn btn-primary">צור מתכון חדש</a>
+    </div>
+
+    <!-- Recipes Grid -->
+    <div id="recipes-grid" class="recipes-grid hidden"></div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="/home" class="nav-item">
+        <span class="nav-icon">&#9751;</span>
+        <span>בית</span>
+      </a>
+      <a href="/saved" class="nav-item active">
+        <span class="nav-icon">&#9733;</span>
+        <span>שמורים</span>
+      </a>
+      <a href="/inspiration" class="nav-item">
+        <span class="nav-icon">&#10024;</span>
+        <span>השראה</span>
+      </a>
+      <a href="/profile" class="nav-item">
+        <span class="nav-icon">&#9786;</span>
+        <span>פרופיל</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Recipe View Modal -->
+  <div id="recipe-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content modal-large">
+      <button id="close-modal-btn" class="close-btn">&times;</button>
+      <div id="modal-recipe-content"></div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/saved.js"></script>
+</body>
+</html>
