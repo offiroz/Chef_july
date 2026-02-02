@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chef July - השראה</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+  <div class="saved-page">
+    <header class="page-header">
+      <a href="/home" class="back-btn">&larr; חזרה</a>
+      <h1>השראה מהקהילה</h1>
+    </header>
+
+    <!-- Filters -->
+    <div class="filters-bar">
+      <select id="filter-difficulty" class="filter-select">
+        <option value="">כל הרמות</option>
+        <option value="קל">קל</option>
+        <option value="בינוני">בינוני</option>
+        <option value="מאתגר">מאתגר</option>
+      </select>
+      <select id="filter-time" class="filter-select">
+        <option value="">כל הזמנים</option>
+        <option value="30">עד 30 דקות</option>
+        <option value="60">עד שעה</option>
+        <option value="120">עד שעתיים</option>
+      </select>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">טוען מתכונים מומלצים...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="empty-state hidden">
+      <div class="empty-icon">&#10024;</div>
+      <h2>עדיין אין מתכונים מדורגים</h2>
+      <p>היה הראשון ליצור ולדרג מתכונים!</p>
+      <a href="/recipe" class="btn btn-primary">צור מתכון</a>
+    </div>
+
+    <!-- Recipes Grid -->
+    <div id="recipes-grid" class="recipes-grid hidden"></div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="/home" class="nav-item">
+        <span class="nav-icon">&#9751;</span>
+        <span>בית</span>
+      </a>
+      <a href="/saved" class="nav-item">
+        <span class="nav-icon">&#9733;</span>
+        <span>שמורים</span>
+      </a>
+      <a href="/inspiration" class="nav-item active">
+        <span class="nav-icon">&#10024;</span>
+        <span>השראה</span>
+      </a>
+      <a href="/profile" class="nav-item">
+        <span class="nav-icon">&#9786;</span>
+        <span>פרופיל</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Recipe View Modal -->
+  <div id="recipe-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content modal-large">
+      <button id="close-modal-btn" class="close-btn">&times;</button>
+      <div id="modal-recipe-content"></div>
+    </div>
+  </div>
+
+  <script src="/js/animations.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/inspiration.js"></script>
+</body>
+</html>

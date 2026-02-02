@@ -10,6 +10,7 @@ const { generalLimiter } = require('./middleware/rateLimiter');
 const authRoutes = require('./routes/auth');
 const recipeRoutes = require('./routes/recipes');
 const ratingRoutes = require('./routes/ratings');
+const userRoutes = require('./routes/users');
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
 app.use('/api/auth', authRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/ratings', ratingRoutes);
+app.use('/api/users', userRoutes);
 
 // Serve HTML pages
 app.get('/', (req, res) => {
@@ -64,6 +66,18 @@ app.get('/recipe', (req, res) => {
 
 app.get('/saved', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'pages', 'saved.html'));
+});
+
+app.get('/inspiration', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'pages', 'inspiration.html'));
+});
+
+app.get('/profile', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'pages', 'profile.html'));
+});
+
+app.get('/settings', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'pages', 'settings.html'));
 });
 
 // Error handling

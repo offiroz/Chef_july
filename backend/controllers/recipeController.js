@@ -168,4 +168,55 @@ async function deleteRecipe(req, res, next) {
   }
 }
 
-module.exports = { generate, getById, saveRecipe, unsaveRecipe, getSaved, deleteRecipe };
+const RATING_SYSTEM = require('../services/ratingService');
+
+async function getInspiration(req, res, next) {
+  try {
+    const { difficulty, maxTime } = req.query;
+    const limit = parseInt(req.query.limit) || 20;
+
+    let query = `
+      SELECT
+        r.*,
+        u.username as creator_name
+      FROM recipes r
+      LEFT JOIN users u ON r.user_id = u.id
+      WHERE r.average_rating >= ?
+        AND r.ratings_count >= ?
+    `;
+
+    const params = [
+      RATING_SYSTEM.MIN_DISPLAY_RATING,
+      RATING_SYSTEM.MIN_RATINGS_COUNT
+    ];
+
+    if (difficulty) {
+      query += ` AND r.difficulty = ?`;
+      params.push(difficulty);
+    }
+
+    if (maxTime) {
+      query += ` AND r.total_time <= ?`;
+      params.push(parseInt(maxTime));
+    }
+
+    query += ` ORDER BY r.is_recommended DESC, r.average_rating DESC, r.ratings_count DESC LIMIT ?`;
+    params.push(limit);
+
+    const recipes = await db.all(query, params);
+
+    const parsed = recipes.map(recipe => ({
+      ...recipe,
+      ingredients: JSON.parse(recipe.ingredients || '[]'),
+      instructions: JSON.parse(recipe.instructions || '[]'),
+      tips: JSON.parse(recipe.tips || '[]'),
+      nutrition: JSON.parse(recipe.nutrition || '{}')
+    }));
+
+    res.json({ success: true, recipes: parsed });
+  } catch (error) {
+    next(new DatabaseError('get inspiration', error));
+  }
+}
+
+module.exports = { generate, getById, saveRecipe, unsaveRecipe, getSaved, deleteRecipe, getInspiration };
