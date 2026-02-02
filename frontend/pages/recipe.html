@@ -6,6 +6,7 @@
   <title>Chef July - מתכון</title>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
 </head>
 <body>
   <div class="recipe-page">
@@ -88,8 +89,7 @@
     <!-- Step 2: Loading State -->
     <section id="loading-section" class="recipe-section hidden">
       <div class="loading-container">
-        <img src="/assets/gifs/loading.gif" alt="טוען..." class="loading-gif" onerror="this.style.display='none'">
-        <div class="loading-spinner"></div>
+        <div id="loading-anim" class="anim-container"></div>
         <p class="loading-text">מכין לך משהו טעים...</p>
       </div>
     </section>
@@ -97,7 +97,7 @@
     <!-- Step 3: Recipe Display -->
     <section id="recipe-section" class="recipe-section hidden">
       <div class="recipe-success-gif">
-        <img src="/assets/gifs/success.gif" alt="הצלחה!" class="success-gif" onerror="this.style.display='none'">
+        <div id="success-anim" class="anim-container"></div>
       </div>
 
       <div class="recipe-card">
@@ -164,6 +164,7 @@
     </div>
   </div>
 
+  <script src="/js/animations.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/recipe.js"></script>
 </body>

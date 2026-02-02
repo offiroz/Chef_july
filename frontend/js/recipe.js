@@ -46,9 +46,14 @@ function getPreferences() {
   };
 }
 
+// Initialize animations
+ChefAnim.init('loading-anim', 'loading');
+ChefAnim.init('success-anim', 'success');
+
 // Generate recipe
 async function generateRecipe(preferences) {
   showSection(loadingSection);
+  ChefAnim.play('loading-anim', 'loading');
 
   try {
     const data = await callAPI('/recipes/generate', {
@@ -143,15 +148,12 @@ function displayRecipe(recipe) {
   saveBtn.disabled = false;
   saveBtn.textContent = 'שמור מתכון';
 
-  // Hide success gif after 2 seconds
-  const successGif = document.querySelector('.success-gif');
-  if (successGif) {
-    successGif.style.display = '';
-    setTimeout(() => {
-      successGif.style.opacity = '0';
-      setTimeout(() => { successGif.style.display = 'none'; }, 300);
-    }, 2000);
-  }
+  // Play success animation, then hide after 2.5 seconds
+  ChefAnim.play('success-anim', 'success');
+  setTimeout(() => {
+    const el = document.getElementById('success-anim');
+    if (el) el.style.display = 'none';
+  }, 2500);
 }
 
 // Form submit - generate with preferences
@@ -178,6 +180,11 @@ saveBtn.addEventListener('click', async () => {
     if (data && data.success) {
       saveBtn.textContent = 'נשמר!';
       saveBtn.disabled = true;
+      // Show save animation briefly in the success area
+      const el = document.getElementById('success-anim');
+      if (el) el.style.display = '';
+      ChefAnim.playOnce('success-anim', 'save', 2000, 'idle');
+      setTimeout(() => { if (el) el.style.display = 'none'; }, 2200);
       showSuccess('המתכון נשמר בהצלחה!');
     }
   } catch (error) {
@@ -251,6 +258,11 @@ document.getElementById('submit-rating-btn').addEventListener('click', async () 
 
     if (data && data.success) {
       ratingModal.classList.add('hidden');
+      // Show thankyou animation briefly
+      const el = document.getElementById('success-anim');
+      if (el) el.style.display = '';
+      ChefAnim.playOnce('success-anim', 'thankyou', 2000, 'idle');
+      setTimeout(() => { if (el) el.style.display = 'none'; }, 2200);
       showSuccess('תודה על הדירוג!');
     }
   } catch (error) {

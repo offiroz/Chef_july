@@ -6,6 +6,7 @@
   <title>Chef July - בית</title>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
 </head>
 <body>
   <div class="home-container">
@@ -15,7 +16,7 @@
 
     <div class="home-content">
       <div class="home-gif-section">
-        <img src="/assets/gifs/idle.gif" alt="Chef July" class="home-gif" onerror="this.style.display='none'">
+        <div id="home-anim" class="anim-container home-gif"></div>
       </div>
 
       <a href="/recipe" class="btn btn-primary btn-large btn-recipe">קבל מתכון</a>
@@ -41,8 +42,11 @@
     </nav>
   </div>
 
+  <script src="/js/animations.js"></script>
   <script src="/js/api.js"></script>
   <script>
+    ChefAnim.init('home-anim', 'idle', 'large');
+
     (async () => {
       try {
         const data = await callAPI('/auth/me');

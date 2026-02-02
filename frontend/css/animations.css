@@ -1,0 +1,296 @@
+/* =============================================
+   Chef July - GIF Animation Placeholders
+
+   These CSS animations serve as placeholders
+   until real GIF files are placed in /assets/gifs/
+   When real GIFs exist, the <img> tag loads them
+   and the CSS fallback is hidden automatically.
+   ============================================= */
+
+/* Animation Container */
+.anim-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.anim-container img {
+  position: relative;
+  z-index: 1;
+}
+
+/* CSS Fallback - shown when img fails to load */
+.anim-fallback {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.anim-fallback.small {
+  width: 120px;
+  height: 120px;
+}
+
+.anim-fallback.large {
+  width: 250px;
+  height: 250px;
+}
+
+/* =============================================
+   1. IDLE Animation
+   Gentle floating chef hat with soft pulse
+   ============================================= */
+.anim-idle {
+  position: relative;
+}
+
+.anim-idle .chef-icon {
+  font-size: 5rem;
+  animation: idle-float 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+.anim-idle.small .chef-icon {
+  font-size: 3.5rem;
+}
+
+.anim-idle.large .chef-icon {
+  font-size: 7rem;
+}
+
+.anim-idle::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 8px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.08), transparent);
+  border-radius: 50%;
+  animation: idle-shadow 3s ease-in-out infinite;
+}
+
+@keyframes idle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes idle-shadow {
+  0%, 100% { transform: translateX(-50%) scaleX(1); opacity: 0.6; }
+  50% { transform: translateX(-50%) scaleX(0.75); opacity: 0.3; }
+}
+
+/* =============================================
+   2. LOADING Animation
+   Spinning/chopping motion with bouncing dots
+   ============================================= */
+.anim-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.anim-loading .cook-icon {
+  font-size: 4rem;
+  animation: loading-stir 1.2s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes loading-stir {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-15deg) scale(1.05); }
+  50% { transform: rotate(0deg) scale(1); }
+  75% { transform: rotate(15deg) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.loading-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.loading-dots span {
+  width: 10px;
+  height: 10px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: dot-bounce 1.4s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* =============================================
+   3. SUCCESS Animation
+   Celebration burst with sparkles
+   ============================================= */
+.anim-success {
+  position: relative;
+}
+
+.anim-success .success-icon {
+  font-size: 4.5rem;
+  animation: success-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  display: inline-block;
+}
+
+@keyframes success-pop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.sparkles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 1.2rem;
+  animation: sparkle-burst 1.5s ease-out forwards;
+  opacity: 0;
+}
+
+.sparkle:nth-child(1) { top: 10%; left: 15%; animation-delay: 0.1s; }
+.sparkle:nth-child(2) { top: 5%; right: 20%; animation-delay: 0.2s; }
+.sparkle:nth-child(3) { top: 30%; left: 5%; animation-delay: 0.3s; }
+.sparkle:nth-child(4) { top: 25%; right: 5%; animation-delay: 0.15s; }
+.sparkle:nth-child(5) { bottom: 20%; left: 10%; animation-delay: 0.25s; }
+.sparkle:nth-child(6) { bottom: 15%; right: 15%; animation-delay: 0.35s; }
+
+@keyframes sparkle-burst {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  30% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+  100% { transform: scale(0.5) rotate(360deg) translateY(-20px); opacity: 0; }
+}
+
+/* =============================================
+   4. SAVE Animation
+   Item sliding into box with checkmark
+   ============================================= */
+.anim-save {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.anim-save .save-item {
+  font-size: 2.5rem;
+  animation: save-slide 0.8s ease-in forwards;
+}
+
+.anim-save .save-box {
+  font-size: 3rem;
+}
+
+.anim-save .save-check {
+  position: absolute;
+  top: 30%;
+  font-size: 2rem;
+  color: var(--success);
+  animation: check-appear 0.4s ease-out 0.6s forwards;
+  opacity: 0;
+  transform: scale(0);
+}
+
+@keyframes save-slide {
+  0% { transform: translateY(-20px); opacity: 1; }
+  60% { transform: translateY(8px); opacity: 1; }
+  100% { transform: translateY(4px); opacity: 0.7; }
+}
+
+@keyframes check-appear {
+  0% { opacity: 0; transform: scale(0); }
+  60% { transform: scale(1.3); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* =============================================
+   5. THANK YOU Animation
+   Heart burst with bow
+   ============================================= */
+.anim-thankyou {
+  position: relative;
+}
+
+.anim-thankyou .thankyou-icon {
+  font-size: 4rem;
+  animation: thankyou-bow 1.2s ease-in-out forwards;
+  display: inline-block;
+}
+
+@keyframes thankyou-bow {
+  0% { transform: rotate(0deg); }
+  30% { transform: rotate(-20deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.hearts {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.heart {
+  position: absolute;
+  font-size: 1.4rem;
+  opacity: 0;
+}
+
+.heart:nth-child(1) { left: 20%; animation: heart-float 2s ease-out 0.3s forwards; }
+.heart:nth-child(2) { left: 50%; animation: heart-float 2s ease-out 0.5s forwards; }
+.heart:nth-child(3) { left: 75%; animation: heart-float 2s ease-out 0.7s forwards; }
+
+@keyframes heart-float {
+  0% { bottom: 30%; opacity: 0; transform: scale(0.5); }
+  30% { opacity: 1; transform: scale(1); }
+  100% { bottom: 90%; opacity: 0; transform: scale(0.6); }
+}
+
+/* =============================================
+   Transition between states
+   ============================================= */
+.anim-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.anim-fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}

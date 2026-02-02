@@ -6,12 +6,13 @@
   <title>Chef July - המתכון המושלם שלך</title>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
 </head>
 <body>
   <div class="landing-container">
     <div class="landing-content">
       <div class="logo-section">
-        <img src="/assets/gifs/idle.gif" alt="Chef July" class="landing-gif" onerror="this.style.display='none'">
+        <div id="landing-anim" class="anim-container landing-gif"></div>
         <h1 class="logo-text">Chef July</h1>
       </div>
 
@@ -25,8 +26,11 @@
     </div>
   </div>
 
+  <script src="/js/animations.js"></script>
   <script src="/js/api.js"></script>
   <script>
+    ChefAnim.init('landing-anim', 'idle');
+
     // If already logged in, redirect to home
     (async () => {
       try {
