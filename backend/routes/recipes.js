@@ -10,8 +10,8 @@ router.use(requireAuth);
 router.post('/generate', asyncHandler(recipeController.generate));
 router.post('/save', asyncHandler(recipeController.saveRecipe));
 router.get('/saved', asyncHandler(recipeController.getSaved));
-router.delete('/:id', asyncHandler(recipeController.deleteRecipe));
 router.delete('/unsave/:id', asyncHandler(recipeController.unsaveRecipe));
 router.get('/:id', asyncHandler(recipeController.getById));
+router.delete('/:id', asyncHandler(recipeController.deleteRecipe));
 
 module.exports = router;
