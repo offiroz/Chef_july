@@ -33,7 +33,7 @@ const config = {
 const requiredEnvVars = ['SESSION_SECRET'];
 requiredEnvVars.forEach(varName => {
   if (!process.env[varName]) {
-    console.warn`Warning: Missing environment variable: ${varName}`);
+    console.warn(`Warning: Missing environment variable: ${varName}`);
   }
 });
 
