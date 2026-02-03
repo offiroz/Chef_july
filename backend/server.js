@@ -63,7 +63,7 @@ async function start() {
   try {
     await initDatabase();
 
-    app.listen(config.port, () => {
+    app.listen(config.port, '0.0.0.0', () => {
       console.log`Chef July server running on port ${config.port}`);
       console.log`Environment: ${config.env}`);
     });
