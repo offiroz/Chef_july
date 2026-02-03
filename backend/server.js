@@ -51,6 +51,11 @@ app.use(express.static(path.join(__dirname, '..', 'frontend'), {
   etag: true
 }));
 
+// Health check (public, no auth required)
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/recipes', recipeRoutes);
