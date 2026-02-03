@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chef July - הגדרות</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+  <div class="settings-page">
+    <header class="page-header">
+      <a href="/profile" class="back-btn">&larr; חזרה</a>
+      <h1>הגדרות</h1>
+    </header>
+
+    <div class="settings-content">
+      <h2 class="settings-title">העדפות ברירת מחדל למתכונים</h2>
+      <p class="settings-subtitle">ההעדפות האלו ישמשו כברירת מחדל כשתבקש מתכון חדש</p>
+
+      <form id="settings-form" class="settings-form">
+        <div class="form-group">
+          <label for="defaultDifficulty">רמת קושי מועדפת</label>
+          <select id="defaultDifficulty" name="defaultDifficulty">
+            <option value="">ללא העדפה</option>
+            <option value="קל">קל</option>
+            <option value="בינוני">בינוני</option>
+            <option value="מאתגר">מאתגר</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="defaultMaxTime">זמן הכנה ממוצע (דקות)</label>
+          <select id="defaultMaxTime" name="defaultMaxTime">
+            <option value="">ללא העדפה</option>
+            <option value="15">15 דקות</option>
+            <option value="30">30 דקות</option>
+            <option value="45">45 דקות</option>
+            <option value="60">שעה</option>
+            <option value="90">שעה וחצי</option>
+            <option value="120">שעתיים</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="defaultServings">מספר מנות</label>
+          <select id="defaultServings" name="defaultServings">
+            <option value="">ללא העדפה</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="dietaryPreference">העדפות תזונה</label>
+          <select id="dietaryPreference" name="dietaryPreference">
+            <option value="">ללא העדפה</option>
+            <option value="צמחוני">צמחוני</option>
+            <option value="טבעוני">טבעוני</option>
+            <option value="ללא גלוטן">ללא גלוטן</option>
+            <option value="דל פחמימות">דל פחמימות</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">שמור שינויים</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/animations.js"></script>
+  <script src="/js/api.js"></script>
+  <script>
+    // Load current preferences
+    (async () => {
+      try {
+        const auth = await callAPI('/auth/me');
+        if (!auth || !auth.success) {
+          window.location.href = '/login';
+          return;
+        }
+
+        const data = await callAPI('/users/preferences');
+        if (data && data.preferences) {
+          const p = data.preferences;
+          if (p.default_difficulty) document.getElementById('defaultDifficulty').value = p.default_difficulty;
+          if (p.default_max_time) document.getElementById('defaultMaxTime').value = p.default_max_time;
+          if (p.default_servings) document.getElementById('defaultServings').value = p.default_servings;
+          if (p.dietary_preference) document.getElementById('dietaryPreference').value = p.dietary_preference;
+        }
+      } catch (e) {
+        window.location.href = '/login';
+      }
+    })();
+
+    // Save preferences
+    document.getElementById('settings-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      try {
+        const data = await callAPI('/users/preferences', {
+          method: 'PUT',
+          body: JSON.stringify({
+            defaultDifficulty: document.getElementById('defaultDifficulty').value || null,
+            defaultMaxTime: parseInt(document.getElementById('defaultMaxTime').value) || null,
+            defaultServings: parseInt(document.getElementById('defaultServings').value) || null,
+            dietaryPreference: document.getElementById('dietaryPreference').value || null
+          })
+        });
+
+        if (data && data.success) {
+          showSuccess('ההעדפות נשמרו בהצלחה!');
+        }
+      } catch (error) {
+        // Error shown by callAPI
+      }
+    });
+  </script>
+</body>
+</html>

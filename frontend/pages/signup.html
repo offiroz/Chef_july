@@ -6,12 +6,13 @@
   <title>Chef July - הרשמה</title>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
 </head>
 <body>
   <div class="auth-container">
     <div class="auth-card">
       <div class="auth-header">
-        <img src="/assets/gifs/idle.gif" alt="Chef July" class="auth-gif" onerror="this.style.display='none'">
+        <div id="auth-anim" class="anim-container auth-gif"></div>
         <h1>Chef July</h1>
         <h2>צור חשבון חדש</h2>
       </div>
@@ -52,7 +53,9 @@
     </div>
   </div>
 
+  <script src="/js/animations.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>
+  <script>ChefAnim.init('auth-anim', 'idle', 'small');</script>
 </body>
 </html>
