@@ -1,3 +1,6 @@
+/* Import Google Font - Varela Round */
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
 /* Reset & Base */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -25,7 +28,7 @@ html {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Varela Round', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
