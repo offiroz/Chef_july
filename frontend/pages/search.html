@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chef July - חיפוש מתכונים</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+  <div class="saved-page">
+    <header class="page-header">
+      <a href="/" class="back-btn">&larr; חזרה</a>
+      <h1>חיפוש מתכונים</h1>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <form id="search-form" class="search-form">
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder="חפש מתכון לפי שם, תיאור או מצרך..."
+          autocomplete="off"
+        >
+        <button type="submit" class="btn btn-primary search-btn">חפש</button>
+      </form>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-bar">
+      <select id="filter-difficulty" class="filter-select">
+        <option value="">כל הרמות</option>
+        <option value="קל">קל</option>
+        <option value="בינוני">בינוני</option>
+        <option value="מאתגר">מאתגר</option>
+      </select>
+      <select id="filter-time" class="filter-select">
+        <option value="">כל הזמנים</option>
+        <option value="30">עד 30 דקות</option>
+        <option value="60">עד שעה</option>
+        <option value="120">עד שעתיים</option>
+      </select>
+    </div>
+
+    <!-- Initial State -->
+    <div id="initial-state" class="empty-state">
+      <div id="search-anim" class="anim-container" style="width:150px;height:150px;margin:0 auto 12px;"></div>
+      <h2>מה בא לך לבשל?</h2>
+      <p>חפש מתכונים לפי שם, תיאור או מצרכים</p>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="loading-container hidden">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">מחפש מתכונים...</p>
+    </div>
+
+    <!-- Empty Results -->
+    <div id="empty-results" class="empty-state hidden">
+      <div class="empty-icon">&#128269;</div>
+      <h2>לא נמצאו מתכונים</h2>
+      <p>נסה לחפש עם מילים אחרות</p>
+    </div>
+
+    <!-- Results Count -->
+    <div id="results-info" class="results-info hidden"></div>
+
+    <!-- Recipes Grid -->
+    <div id="recipes-grid" class="recipes-grid hidden"></div>
+
+    <!-- Sign Up CTA -->
+    <div id="signup-cta" class="signup-cta hidden">
+      <p>רוצה ליצור מתכונים משלך בעזרת בינה מלאכותית?</p>
+      <a href="/signup" class="btn btn-primary btn-small">הרשם בחינם</a>
+    </div>
+  </div>
+
+  <!-- Recipe View Modal -->
+  <div id="recipe-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content modal-large">
+      <button id="close-modal-btn" class="close-btn">&times;</button>
+      <div id="modal-recipe-content"></div>
+    </div>
+  </div>
+
+  <script src="/js/animations.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/search.js"></script>
+</body>
+</html>
