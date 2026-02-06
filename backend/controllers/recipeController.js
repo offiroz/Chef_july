@@ -219,4 +219,83 @@ async function getInspiration(req, res, next) {
   }
 }
 
-module.exports = { generate, getById, saveRecipe, unsaveRecipe, getSaved, deleteRecipe, getInspiration };
+async function getByIdPublic(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    const recipe = await db.get(`
+      SELECT r.*, u.username as creator_name
+      FROM recipes r
+      LEFT JOIN users u ON r.user_id = u.id
+      WHERE r.id = ?
+    `, [id]);
+
+    if (!recipe) {
+      throw new ValidationError('id', 'המתכון לא נמצא');
+    }
+
+    recipe.ingredients = JSON.parse(recipe.ingredients || '[]');
+    recipe.instructions = JSON.parse(recipe.instructions || '[]');
+    recipe.tips = JSON.parse(recipe.tips || '[]');
+    recipe.nutrition = JSON.parse(recipe.nutrition || '{}');
+
+    res.json({ success: true, recipe });
+  } catch (error) {
+    if (error.isOperational) return next(error);
+    next(new DatabaseError('get recipe', error));
+  }
+}
+
+async function searchPublic(req, res, next) {
+  try {
+    const { q, difficulty, maxTime } = req.query;
+    const limit = Math.min(parseInt(req.query.limit) || 20, 50);
+
+    if (!q || q.trim().length === 0) {
+      throw new ValidationError('q', 'נדרש מונח חיפוש');
+    }
+
+    const searchTerm = `%${q.trim()}%`;
+
+    let query = `
+      SELECT
+        r.id, r.title, r.description, r.difficulty,
+        r.prep_time, r.cook_time, r.total_time, r.servings,
+        r.ingredients, r.average_rating, r.ratings_count, r.is_recommended,
+        r.created_at,
+        u.username as creator_name
+      FROM recipes r
+      LEFT JOIN users u ON r.user_id = u.id
+      WHERE (r.title LIKE ? OR r.description LIKE ? OR r.ingredients LIKE ?)
+    `;
+
+    const params = [searchTerm, searchTerm, searchTerm];
+
+    if (difficulty) {
+      query += ` AND r.difficulty = ?`;
+      params.push(difficulty);
+    }
+
+    if (maxTime) {
+      query += ` AND r.total_time <= ?`;
+      params.push(parseInt(maxTime));
+    }
+
+    query += ` ORDER BY r.is_recommended DESC, r.average_rating DESC, r.ratings_count DESC LIMIT ?`;
+    params.push(limit);
+
+    const recipes = await db.all(query, params);
+
+    const parsed = recipes.map(recipe => ({
+      ...recipe,
+      ingredients: JSON.parse(recipe.ingredients || '[]'),
+    }));
+
+    res.json({ success: true, recipes: parsed });
+  } catch (error) {
+    if (error.isOperational) return next(error);
+    next(new DatabaseError('search recipes', error));
+  }
+}
+
+module.exports = { generate, getById, getByIdPublic, saveRecipe, unsaveRecipe, getSaved, deleteRecipe, getInspiration, searchPublic };

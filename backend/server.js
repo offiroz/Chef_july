@@ -69,7 +69,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(frontendPages, 'index.html'));
 });
 
-const pageRoutes = ['login', 'signup', 'home', 'recipe', 'saved', 'inspiration', 'profile', 'settings'];
+const pageRoutes = ['login', 'signup', 'home', 'recipe', 'saved', 'inspiration', 'profile', 'settings', 'search'];
 pageRoutes.forEach(page => {
   app.get(`/${page}`, (req, res) => {
     res.sendFile(path.join(frontendPages, 'pages', `${page}.html`));

@@ -4,7 +4,11 @@ const { asyncHandler } = require('../middleware/errorHandler');
 const { requireAuth } = require('../middleware/auth');
 const recipeController = require('../controllers/recipeController');
 
-// All recipe routes require authentication
+// Public routes (no auth required)
+router.get('/search', asyncHandler(recipeController.searchPublic));
+router.get('/public/:id', asyncHandler(recipeController.getByIdPublic));
+
+// All remaining recipe routes require authentication
 router.use(requireAuth);
 
 router.post('/generate', asyncHandler(recipeController.generate));

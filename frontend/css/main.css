@@ -878,6 +878,60 @@ a:hover {
   border-color: var(--primary);
 }
 
+/* Search Bar */
+.search-bar {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.search-form {
+  display: flex;
+  gap: 10px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  direction: rtl;
+  transition: border-color 0.2s;
+  background: var(--bg-card);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.search-btn {
+  padding: 12px 24px;
+  white-space: nowrap;
+}
+
+.results-info {
+  padding: 12px 20px;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Signup CTA */
+.signup-cta {
+  text-align: center;
+  padding: 24px 20px;
+  margin: 0 20px 20px;
+  background: #fef3e2;
+  border-radius: var(--radius);
+}
+
+.signup-cta p {
+  color: var(--text);
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
 /* Recommended Badge */
 .recommended-badge {
   background: var(--success);
