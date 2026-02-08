@@ -902,12 +902,17 @@ a:hover {
   font-size: 1.15rem;
   line-height: 1.5;
   direction: rtl;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  text-align: right;
+  transition: border-color 0.2s, box-shadow 0.2s, height 0.15s ease;
   background: var(--bg-card);
-  resize: none;
+  resize: none !important;
   overflow: hidden;
   min-height: 56px;
+  max-height: 300px;
   font-family: inherit;
+  box-sizing: border-box;
+  display: block;
+  -webkit-appearance: none;
 }
 
 .search-input:focus {
