@@ -190,5 +190,21 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
+// Auto-expand textarea as user types
+function autoExpandInput() {
+  searchInput.style.height = 'auto';
+  searchInput.style.height = searchInput.scrollHeight + 'px';
+}
+
+searchInput.addEventListener('input', autoExpandInput);
+
+// Submit on Enter (without Shift), allow Shift+Enter for new line
+searchInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    performSearch();
+  }
+});
+
 // Focus search input on load
 searchInput.focus();
