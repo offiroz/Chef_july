@@ -193,7 +193,14 @@ function escapeHtml(text) {
 // Auto-expand textarea as user types
 function autoExpandInput() {
   searchInput.style.height = 'auto';
-  searchInput.style.height = searchInput.scrollHeight + 'px';
+  const maxHeight = 300;
+  if (searchInput.scrollHeight > maxHeight) {
+    searchInput.style.height = maxHeight + 'px';
+    searchInput.style.overflowY = 'auto';
+  } else {
+    searchInput.style.height = searchInput.scrollHeight + 'px';
+    searchInput.style.overflowY = 'hidden';
+  }
 }
 
 searchInput.addEventListener('input', autoExpandInput);
