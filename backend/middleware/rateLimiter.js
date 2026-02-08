@@ -23,4 +23,15 @@ const authLimiter = rateLimit({
   legacyHeaders: false
 });
 
-module.exports = { generalLimiter, authLimiter };
+const generatePublicLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5,
+  message: {
+    success: false,
+    message: 'הגעת למגבלת הבקשות. אנא נסה שוב בעוד מספר דקות.'
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+module.exports = { generalLimiter, authLimiter, generatePublicLimiter };

@@ -17,6 +17,50 @@ const SYSTEM_INSTRUCTION = `אתה שף מקצועי שמתמחה ביצירת �
 פורמט תשובה: JSON בלבד, ללא טקסט נוסף.`;
 
 function buildUserPrompt(preferences) {
+  // Free-text mode: user describes what they want in natural language
+  if (preferences.freeText) {
+    const constraints = [];
+    if (preferences.difficulty) constraints.push(`- רמת קושי: ${preferences.difficulty}`);
+    if (preferences.maxTime) constraints.push(`- זמן הכנה: עד ${preferences.maxTime} דקות`);
+    if (preferences.servings) constraints.push(`- מספר מנות: ${preferences.servings}`);
+
+    return `צור מתכון על בסיס הבקשה הבאה: "${preferences.freeText}"
+${constraints.length > 0 ? `\nדרישות נוספות:\n${constraints.join('\n')}` : ''}
+
+החזר JSON בפורמט הבא בדיוק:
+{
+  "title": "שם המתכון בעברית",
+  "description": "תיאור קצר ומפתה (1-2 משפטים)",
+  "difficulty": "קל/בינוני/מאתגר",
+  "prepTime": מספר_דקות_הכנה,
+  "cookTime": מספר_דקות_בישול,
+  "totalTime": סך_הכל_דקות,
+  "servings": מספר_מנות,
+  "ingredients": [
+    {
+      "item": "שם המצרך",
+      "amount": "כמות",
+      "unit": "יחידת_מידה"
+    }
+  ],
+  "instructions": [
+    "שלב 1 - הוראה מפורטת",
+    "שלב 2 - הוראה מפורטת"
+  ],
+  "tips": [
+    "טיפ מועיל 1",
+    "טיפ מועיל 2"
+  ],
+  "nutrition": {
+    "calories": מספר_לכ_100_גרם,
+    "protein": "גרם",
+    "carbs": "גרם",
+    "fat": "גרם"
+  }
+}`;
+  }
+
+  // Structured mode: preferences with specific fields
   return `צור מתכון ${preferences.difficulty || 'קל'} ל${preferences.mealType || 'ארוחה'}.
 
 דרישות:

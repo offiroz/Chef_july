@@ -298,4 +298,28 @@ async function searchPublic(req, res, next) {
   }
 }
 
-module.exports = { generate, getById, getByIdPublic, saveRecipe, unsaveRecipe, getSaved, deleteRecipe, getInspiration, searchPublic };
+async function generatePublic(req, res, next) {
+  try {
+    const preferences = req.body.preferences || {};
+
+    if (!preferences.freeText || preferences.freeText.trim().length === 0) {
+      throw new ValidationError('freeText', 'נדרש תיאור המתכון');
+    }
+    if (preferences.freeText.length > 500) {
+      throw new ValidationError('freeText', 'התיאור ארוך מדי (מקסימום 500 תווים)');
+    }
+
+    if (preferences.maxTime && (preferences.maxTime < 5 || preferences.maxTime > 300)) {
+      throw new ValidationError('maxTime', 'זמן ההכנה חייב להיות בין 5 ל-300 דקות');
+    }
+
+    const recipe = await generateRecipeWithRetry(preferences);
+
+    res.json({ success: true, recipe });
+  } catch (error) {
+    if (error.isOperational) return next(error);
+    next(new DatabaseError('generate public recipe', error));
+  }
+}
+
+module.exports = { generate, getById, getByIdPublic, saveRecipe, unsaveRecipe, getSaved, deleteRecipe, getInspiration, searchPublic, generatePublic };

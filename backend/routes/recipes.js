@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 const { asyncHandler } = require('../middleware/errorHandler');
 const { requireAuth } = require('../middleware/auth');
+const { generatePublicLimiter } = require('../middleware/rateLimiter');
 const recipeController = require('../controllers/recipeController');
 
 // Public routes (no auth required)
 router.get('/search', asyncHandler(recipeController.searchPublic));
 router.get('/public/:id', asyncHandler(recipeController.getByIdPublic));
+router.post('/generate-public', generatePublicLimiter, asyncHandler(recipeController.generatePublic));
 
 // All remaining recipe routes require authentication
 router.use(requireAuth);
