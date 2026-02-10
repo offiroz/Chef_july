@@ -8,24 +8,49 @@ const signupCta = document.getElementById('signup-cta');
 const filterDifficulty = document.getElementById('filter-difficulty');
 const filterTime = document.getElementById('filter-time');
 
-ChefAnim.init('search-anim', 'idle', 'small');
+// Check if all required elements exist
+const requiredElements = {
+  'search-form': searchForm,
+  'search-input': searchInput,
+  'initial-state': initialState,
+  'loading': loadingEl,
+  'error-state': errorState,
+  'recipe-result': recipeResult,
+  'signup-cta': signupCta,
+  'filter-difficulty': filterDifficulty,
+  'filter-time': filterTime
+};
 
-// Generate on form submit
-searchForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  console.log('Form submitted, generating recipe...');
-  performGenerate();
-  return false;
-});
+const missingElements = Object.entries(requiredElements)
+  .filter(([name, element]) => !element)
+  .map(([name]) => name);
 
-// Re-generate when filters change (only if there's a query)
-filterDifficulty.addEventListener('change', () => {
-  if (searchInput.value.trim()) performGenerate();
-});
-filterTime.addEventListener('change', () => {
-  if (searchInput.value.trim()) performGenerate();
-});
+if (missingElements.length > 0) {
+  console.error('❌ Missing required elements:', missingElements);
+  console.error('This page is missing HTML elements required for search.js to work.');
+  console.error('Are you on the correct page? Expected: /search');
+  // Don't proceed if elements are missing
+} else {
+  console.log('✅ All required elements found. Initializing search page...');
+
+  ChefAnim.init('search-anim', 'idle', 'small');
+
+  // Generate on form submit
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Form submitted, generating recipe...');
+    performGenerate();
+    return false;
+  });
+
+  // Re-generate when filters change (only if there's a query)
+  filterDifficulty.addEventListener('change', () => {
+    if (searchInput.value.trim()) performGenerate();
+  });
+  filterTime.addEventListener('change', () => {
+    if (searchInput.value.trim()) performGenerate();
+  });
 
 async function performGenerate() {
   console.log('performGenerate called');
@@ -158,35 +183,39 @@ function displayRecipe(recipe) {
   }
 }
 
-// New recipe button
-document.getElementById('new-search-btn').addEventListener('click', () => {
-  showInitial();
-  searchInput.value = '';
+  // New recipe button
+  const newSearchBtn = document.getElementById('new-search-btn');
+  if (newSearchBtn) {
+    newSearchBtn.addEventListener('click', () => {
+      showInitial();
+      searchInput.value = '';
+      searchInput.focus();
+    });
+  }
+
+  // Auto-expand textarea as user types
+  function autoExpandInput() {
+    searchInput.style.height = 'auto';
+    const maxHeight = 300;
+    if (searchInput.scrollHeight > maxHeight) {
+      searchInput.style.height = maxHeight + 'px';
+      searchInput.style.overflowY = 'auto';
+    } else {
+      searchInput.style.height = searchInput.scrollHeight + 'px';
+      searchInput.style.overflowY = 'hidden';
+    }
+  }
+
+  searchInput.addEventListener('input', autoExpandInput);
+
+  // Submit on Enter (without Shift), allow Shift+Enter for new line
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      performGenerate();
+    }
+  });
+
+  // Focus search input on load
   searchInput.focus();
-});
-
-// Auto-expand textarea as user types
-function autoExpandInput() {
-  searchInput.style.height = 'auto';
-  const maxHeight = 300;
-  if (searchInput.scrollHeight > maxHeight) {
-    searchInput.style.height = maxHeight + 'px';
-    searchInput.style.overflowY = 'auto';
-  } else {
-    searchInput.style.height = searchInput.scrollHeight + 'px';
-    searchInput.style.overflowY = 'hidden';
-  }
 }
-
-searchInput.addEventListener('input', autoExpandInput);
-
-// Submit on Enter (without Shift), allow Shift+Enter for new line
-searchInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    performGenerate();
-  }
-});
-
-// Focus search input on load
-searchInput.focus();
