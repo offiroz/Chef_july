@@ -13,7 +13,10 @@ ChefAnim.init('search-anim', 'idle', 'small');
 // Generate on form submit
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
+  e.stopPropagation();
+  console.log('Form submitted, generating recipe...');
   performGenerate();
+  return false;
 });
 
 // Re-generate when filters change (only if there's a query)
@@ -25,12 +28,17 @@ filterTime.addEventListener('change', () => {
 });
 
 async function performGenerate() {
+  console.log('performGenerate called');
   const query = searchInput.value.trim();
+  console.log('Query:', query);
+
   if (!query) {
+    console.log('No query, showing initial state');
     showInitial();
     return;
   }
 
+  console.log('Showing loading state');
   showLoading();
 
   try {
@@ -38,18 +46,22 @@ async function performGenerate() {
     if (filterDifficulty.value) preferences.difficulty = filterDifficulty.value;
     if (filterTime.value) preferences.maxTime = parseInt(filterTime.value);
 
+    console.log('Calling API with preferences:', preferences);
     const data = await callAPI('/recipes/generate-public', {
       method: 'POST',
       body: JSON.stringify({ preferences })
     });
 
+    console.log('API response:', data);
     hideAll();
 
     if (!data || !data.success || !data.recipe) {
+      console.log('API returned error or no recipe');
       errorState.classList.remove('hidden');
       return;
     }
 
+    console.log('Displaying recipe');
     displayRecipe(data.recipe);
     recipeResult.classList.remove('hidden');
     signupCta.classList.remove('hidden');
@@ -57,6 +69,7 @@ async function performGenerate() {
     // Scroll to top so the recipe is visible and search bar doesn't disappear
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (error) {
+    console.error('Error generating recipe:', error);
     hideAll();
     errorState.classList.remove('hidden');
   }
