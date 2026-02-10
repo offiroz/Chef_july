@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chef July - חיפוש מתכונים</title>
+  <title>Chef July - צור מתכון עם השף</title>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/animations.css">
@@ -12,21 +12,27 @@
   <div class="saved-page">
     <header class="page-header">
       <a href="/" class="back-btn">&larr; חזרה</a>
-      <h1>חיפוש מתכונים</h1>
+      <h1>צור מתכון עם השף</h1>
     </header>
 
     <!-- Search Bar -->
     <div class="search-bar">
-      <form id="search-form" class="search-form">
-        <textarea
-          id="search-input"
-          class="search-input"
-          placeholder="חפש מתכון לפי שם, תיאור או מצרך..."
-          autocomplete="off"
-          rows="1"
-        ></textarea>
-        <button type="submit" class="btn btn-primary search-btn">חפש</button>
-      </form>
+      <center>  
+        <br>
+        <form id="search-form" class="search-form">
+          <textarea
+            id="search-input"
+            class="search-input"
+            placeholder="תאר את המתכון שאתה רוצה... לדוגמה: פסטה ברוטב שמנת עם פטריות"
+            autocomplete="off"
+            rows="10"
+            maxlength="500"
+          ></textarea>
+          <br>
+          <br>
+          <button type="submit" class="btn btn-primary search-btn">צור מתכון</button>
+        </form>
+      </center>
     </div>
 
     <!-- Filters -->
@@ -49,41 +55,58 @@
     <div id="initial-state" class="empty-state">
       <div id="search-anim" class="anim-container" style="width:150px;height:150px;margin:0 auto 12px;"></div>
       <h2>מה בא לך לבשל?</h2>
-      <p>חפש מתכונים לפי שם, תיאור או מצרכים</p>
+      <p>תאר את המתכון שאתה רוצה והשף יצור אותו עבורך</p>
     </div>
 
     <!-- Loading -->
     <div id="loading" class="loading-container hidden">
       <div class="loading-spinner"></div>
-      <p class="loading-text">מחפש מתכונים...</p>
+      <p class="loading-text">יוצר את המתכון שלך...</p>
     </div>
 
-    <!-- Empty Results -->
-    <div id="empty-results" class="empty-state hidden">
-      <div class="empty-icon">&#128269;</div>
-      <h2>לא נמצאו מתכונים</h2>
-      <p>נסה לחפש עם מילים אחרות</p>
+    <!-- Error State -->
+    <div id="error-state" class="empty-state hidden">
+      <div class="empty-icon">&#9888;</div>
+      <h2>לא הצלחנו ליצור מתכון</h2>
+      <p>נסה לתאר מתכון אחר או נסה שוב</p>
     </div>
 
-    <!-- Results Count -->
-    <div id="results-info" class="results-info hidden"></div>
-
-    <!-- Recipes Grid -->
-    <div id="recipes-grid" class="recipes-grid hidden"></div>
+    <!-- Recipe Result -->
+    <div id="recipe-result" class="hidden" style="padding: 0 20px 80px;">
+      <div class="recipe-card">
+        <h2 id="result-title" class="recipe-title"></h2>
+        <p id="result-description" class="recipe-description"></p>
+        <div class="recipe-tags">
+          <span id="result-difficulty" class="tag"></span>
+          <span id="result-time" class="tag"></span>
+          <span id="result-servings" class="tag"></span>
+        </div>
+        <div class="recipe-block">
+          <h3>מצרכים</h3>
+          <ul id="result-ingredients" class="ingredients-list"></ul>
+        </div>
+        <div class="recipe-block">
+          <h3>הוראות הכנה</h3>
+          <ol id="result-instructions" class="instructions-list"></ol>
+        </div>
+        <div id="result-tips-block" class="recipe-block hidden">
+          <h3>טיפים</h3>
+          <ul id="result-tips" class="tips-list"></ul>
+        </div>
+        <div id="result-nutrition-block" class="recipe-block hidden">
+          <h3>ערכים תזונתיים</h3>
+          <div id="result-nutrition" class="nutrition-grid"></div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:16px;">
+        <button id="new-search-btn" class="btn btn-outline">צור מתכון אחר</button>
+      </div>
+    </div>
 
     <!-- Sign Up CTA -->
     <div id="signup-cta" class="signup-cta hidden">
-      <p>רוצה ליצור מתכונים משלך בעזרת בינה מלאכותית?</p>
+      <p>רוצה לשמור מתכונים וליצור ללא הגבלה?</p>
       <a href="/signup" class="btn btn-primary btn-small">הרשם בחינם</a>
-    </div>
-  </div>
-
-  <!-- Recipe View Modal -->
-  <div id="recipe-modal" class="modal hidden">
-    <div class="modal-overlay"></div>
-    <div class="modal-content modal-large">
-      <button id="close-modal-btn" class="close-btn">&times;</button>
-      <div id="modal-recipe-content"></div>
     </div>
   </div>
 
