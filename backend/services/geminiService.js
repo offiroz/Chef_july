@@ -105,7 +105,7 @@ ${preferences.exclude ? `- אסור להכיל: ${preferences.exclude}` : ''}
 
 async function generateRecipe(userPreferences) {
   const model = genAI.getGenerativeModel({
-    model: "gemini-pro",
+    model: "gemini-1.5-flash",
     generationConfig: {
       temperature: 0.9,
       maxOutputTokens: 2048,
