@@ -53,6 +53,9 @@ async function performGenerate() {
     displayRecipe(data.recipe);
     recipeResult.classList.remove('hidden');
     signupCta.classList.remove('hidden');
+
+    // Scroll to top so the recipe is visible and search bar doesn't disappear
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (error) {
     hideAll();
     errorState.classList.remove('hidden');
