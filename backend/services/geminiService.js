@@ -1,8 +1,8 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { GoogleGenAI } = require("@google/genai");
 const config = require('../config/config');
 const { APIError } = require('../utils/errors');
 
-const genAI = new GoogleGenerativeAI(config.gemini.apiKey);
+const ai = new GoogleGenAI({apiKey: config.gemini.apiKey});
 
 const SYSTEM_INSTRUCTION = `אתה שף מקצועי שמתמחה ביצירת מתכונים פשוטים וברורים בעברית.
 
@@ -104,24 +104,22 @@ ${preferences.exclude ? `- אסור להכיל: ${preferences.exclude}` : ''}
 }
 
 async function generateRecipe(userPreferences) {
-  const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-pro",
-    generationConfig: {
+  const prompt = buildUserPrompt(userPreferences);
+
+  // Combine system instruction and user prompt
+  const fullPrompt = `${SYSTEM_INSTRUCTION}\n\n${prompt}`;
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.0-flash',
+    contents: fullPrompt,
+    config: {
       temperature: 0.9,
       maxOutputTokens: 2048,
       topP: 0.95,
     }
   });
 
-  const prompt = buildUserPrompt(userPreferences);
-
-  const result = await model.generateContent([
-    SYSTEM_INSTRUCTION,
-    prompt
-  ]);
-
-  const response = await result.response;
-  const text = response.text();
+  const text = response.text;
 
   // Clean the response - remove markdown code blocks if present
   const jsonText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
