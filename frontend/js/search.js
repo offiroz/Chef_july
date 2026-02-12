@@ -35,42 +35,62 @@ if (missingElements.length > 0) {
 
   ChefAnim.init('search-anim', 'idle', 'small');
 
-  // Generate on form submit
-  searchForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('Form submitted, generating recipe...');
-    performGenerate();
-    return false;
-  });
-
-  // Add explicit button click handler for better mobile support
+  // Add explicit button handler for better mobile support
   const submitBtn = document.getElementById('search-submit-btn');
+  let isSubmitting = false;
+
   if (submitBtn) {
+    // Use touchstart for immediate response on mobile
+    submitBtn.addEventListener('touchstart', (e) => {
+      console.log('Button touched (touchstart)');
+      // Blur the textarea to close mobile keyboard immediately
+      if (searchInput) {
+        searchInput.blur();
+      }
+    }, { passive: true });
+
+    // Main click handler - works for both desktop and mobile
     submitBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
+
+      if (isSubmitting) {
+        console.log('Already submitting, ignoring duplicate click');
+        return false;
+      }
+
       console.log('Button clicked, generating recipe...');
-      // Blur the textarea to close mobile keyboard
+      isSubmitting = true;
+
+      // Ensure keyboard is closed
       if (searchInput) {
         searchInput.blur();
       }
-      performGenerate();
+
+      // Small delay to ensure keyboard closes
+      setTimeout(() => {
+        performGenerate();
+        isSubmitting = false;
+      }, 100);
+
       return false;
     });
+  }
 
-    // Add touchend handler for better mobile responsiveness
-    submitBtn.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      console.log('Button touched (touchend), generating recipe...');
-      // Blur the textarea to close mobile keyboard
+  // Fallback: form submit handler
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Form submitted via submit event');
+
+    if (!isSubmitting) {
       if (searchInput) {
         searchInput.blur();
       }
       performGenerate();
-      return false;
-    }, { passive: false });
-  }
+    }
+    return false;
+  });
 
   // Re-generate when filters change (only if there's a query)
   filterDifficulty.addEventListener('change', () => {

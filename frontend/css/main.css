@@ -933,9 +933,17 @@ a:hover {
   font-size: 1.05rem;
   border-radius: 10px;
   touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(230, 126, 34, 0.2);
   user-select: none;
   -webkit-user-select: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+}
+
+.search-btn:active {
+  transform: scale(0.98);
+  background: var(--primary-dark);
 }
 
 .results-info {
