@@ -17,22 +17,19 @@
 
     <!-- Search Bar -->
     <div class="search-bar">
-      <center>  
-        <br>
-        <form id="search-form" class="search-form">
-          <textarea
-            id="search-input"
-            class="search-input"
-            placeholder="תאר את המתכון שאתה רוצה... לדוגמה: פסטה ברוטב שמנת עם פטריות"
-            autocomplete="off"
-            rows="10"
-            maxlength="500"
-          ></textarea>
-          <br>
-          <br>
-          <button type="submit" class="btn btn-primary search-btn">צור מתכון</button>
-        </form>
-      </center>
+      <form id="search-form" class="search-form">
+        <textarea
+          id="search-input"
+          class="search-input"
+          placeholder="תאר את המתכון שאתה רוצה... לדוגמה: פסטה ברוטב שמנת עם פטריות"
+          autocomplete="off"
+          rows="10"
+          maxlength="500"
+        ></textarea>
+        <div class="search-button-container">
+          <button type="submit" id="search-submit-btn" class="btn btn-primary search-btn">צור מתכון</button>
+        </div>
+      </form>
     </div>
 
     <!-- Filters -->
