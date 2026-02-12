@@ -32,25 +32,34 @@ if (missingElements.length > 0) {
   // Don't proceed if elements are missing
 } else {
   console.log('✅ All required elements found. Initializing search page...');
+  console.log('🔥 User Agent:', navigator.userAgent);
+  console.log('🔥 Screen size:', window.innerWidth, 'x', window.innerHeight);
 
   ChefAnim.init('search-anim', 'idle', 'small');
 
   // Simple, direct form submit handler
   searchForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    console.log('🔥 Form submit triggered');
+    console.log('🔥🔥🔥 Form submit triggered!');
+    console.log('🔥 Event type:', e.type);
+    console.log('🔥 Target:', e.target);
 
     // Close keyboard
     if (searchInput) {
+      console.log('🔥 Blurring input to close keyboard...');
       searchInput.blur();
     }
 
     // Wait a moment for keyboard to close
+    console.log('🔥 Waiting 150ms for keyboard...');
     await new Promise(resolve => setTimeout(resolve, 150));
 
-    console.log('🔥 Calling performGenerate');
+    console.log('🔥 About to call performGenerate()');
     performGenerate();
+    console.log('🔥 performGenerate() call completed');
   });
+
+  console.log('🔥 Form submit handler attached successfully');
 
   // Re-generate when filters change (only if there's a query)
   filterDifficulty.addEventListener('change', () => {
@@ -61,25 +70,35 @@ if (missingElements.length > 0) {
   });
 
 async function performGenerate() {
-  console.log('performGenerate called');
-  const query = searchInput.value.trim();
-  console.log('Query:', query);
+  console.log('🔥🔥🔥 === performGenerate START ===');
 
-  if (!query) {
-    console.log('No query, showing initial state');
-    showInitial();
+  if (!searchInput) {
+    console.error('❌ CRITICAL: searchInput is null!');
     return;
   }
 
-  console.log('Showing loading state');
+  const query = searchInput.value.trim();
+  console.log('🔥 Query value:', JSON.stringify(query));
+  console.log('🔥 Query length:', query.length);
+
+  if (!query) {
+    console.log('⚠️ Empty query - showing initial state');
+    showInitial();
+    console.log('🔥 === performGenerate END (no query) ===');
+    return;
+  }
+
+  console.log('🔥 Valid query detected, showing loading state...');
   showLoading();
+  console.log('🔥 Loading state shown');
 
   try {
     const preferences = { freeText: query };
     if (filterDifficulty.value) preferences.difficulty = filterDifficulty.value;
     if (filterTime.value) preferences.maxTime = parseInt(filterTime.value);
 
-    console.log('Calling API with preferences:', preferences);
+    console.log('🔥 Calling API with preferences:', JSON.stringify(preferences));
+    console.log('🔥 API URL:', '/recipes/generate-public');
     const data = await callAPI('/recipes/generate-public', {
       method: 'POST',
       body: JSON.stringify({ preferences })
@@ -109,16 +128,21 @@ async function performGenerate() {
 }
 
 function showInitial() {
+  console.log('🔥 showInitial() called');
   hideAll();
   initialState.classList.remove('hidden');
+  console.log('🔥 Initial state now visible');
 }
 
 function showLoading() {
+  console.log('🔥 showLoading() called');
   hideAll();
   loadingEl.classList.remove('hidden');
+  console.log('🔥 Loading state now visible');
 }
 
 function hideAll() {
+  console.log('🔥 hideAll() called - hiding all states');
   initialState.classList.add('hidden');
   loadingEl.classList.add('hidden');
   errorState.classList.add('hidden');
