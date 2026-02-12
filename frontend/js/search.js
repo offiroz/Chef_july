@@ -266,6 +266,11 @@ function displayRecipe(recipe) {
     }
   });
 
-  // Focus search input on load
-  searchInput.focus();
+  // Focus search input on load (only on desktop, not on mobile)
+  // Auto-focus causes keyboard to open on mobile which can interfere with button clicks
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (!isMobile) {
+    searchInput.focus();
+  }
+  mlog('📱', isMobile ? 'Mobile detected - skip auto-focus' : 'Desktop - auto-focus');
 }
