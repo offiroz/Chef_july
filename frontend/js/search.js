@@ -1,3 +1,23 @@
+// Mobile Debug Logger - shows logs on screen for iOS debugging
+const mobileDebug = document.getElementById('mobile-debug');
+if (mobileDebug) {
+  mobileDebug.style.display = 'block';
+}
+
+function mlog(emoji, ...args) {
+  const msg = emoji + ' ' + args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ');
+  console.log(msg);
+  if (mobileDebug) {
+    const line = document.createElement('div');
+    line.textContent = new Date().toLocaleTimeString() + ' ' + msg;
+    mobileDebug.appendChild(line);
+    mobileDebug.scrollTop = mobileDebug.scrollHeight;
+  }
+}
+
+// Make mlog available globally for inline onclick
+window.mlog = mlog;
+
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
 const initialState = document.getElementById('initial-state');
@@ -26,40 +46,38 @@ const missingElements = Object.entries(requiredElements)
   .map(([name]) => name);
 
 if (missingElements.length > 0) {
-  console.error('❌ Missing required elements:', missingElements);
-  console.error('This page is missing HTML elements required for search.js to work.');
-  console.error('Are you on the correct page? Expected: /search');
+  mlog('❌', 'Missing required elements:', missingElements);
+  mlog('❌', 'Page missing HTML elements');
   // Don't proceed if elements are missing
 } else {
-  console.log('✅ All required elements found. Initializing search page...');
-  console.log('🔥 User Agent:', navigator.userAgent);
-  console.log('🔥 Screen size:', window.innerWidth, 'x', window.innerHeight);
+  mlog('✅', 'All elements found. Init...');
+  mlog('📱', 'UA:', navigator.userAgent.substring(0, 50));
+  mlog('📐', 'Screen:', window.innerWidth, 'x', window.innerHeight);
 
   ChefAnim.init('search-anim', 'idle', 'small');
 
   // Simple, direct form submit handler
   searchForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    console.log('🔥🔥🔥 Form submit triggered!');
-    console.log('🔥 Event type:', e.type);
-    console.log('🔥 Target:', e.target);
+    mlog('🔥🔥🔥', 'FORM SUBMIT!');
+    mlog('🔥', 'Event:', e.type);
 
     // Close keyboard
     if (searchInput) {
-      console.log('🔥 Blurring input to close keyboard...');
+      mlog('🔥', 'Blur input...');
       searchInput.blur();
     }
 
     // Wait a moment for keyboard to close
-    console.log('🔥 Waiting 150ms for keyboard...');
+    mlog('🔥', 'Wait 150ms...');
     await new Promise(resolve => setTimeout(resolve, 150));
 
-    console.log('🔥 About to call performGenerate()');
+    mlog('🔥', 'Call performGenerate()');
     performGenerate();
-    console.log('🔥 performGenerate() call completed');
+    mlog('🔥', 'performGenerate() done');
   });
 
-  console.log('🔥 Form submit handler attached successfully');
+  mlog('🔥', 'Handler attached OK');
 
   // Re-generate when filters change (only if there's a query)
   filterDifficulty.addEventListener('change', () => {
@@ -70,35 +88,35 @@ if (missingElements.length > 0) {
   });
 
 async function performGenerate() {
-  console.log('🔥🔥🔥 === performGenerate START ===');
+  mlog('🔥🔥🔥', '=== performGenerate START ===');
 
   if (!searchInput) {
-    console.error('❌ CRITICAL: searchInput is null!');
+    mlog('❌', 'searchInput is null!');
     return;
   }
 
   const query = searchInput.value.trim();
-  console.log('🔥 Query value:', JSON.stringify(query));
-  console.log('🔥 Query length:', query.length);
+  mlog('🔥', 'Query:', query);
+  mlog('🔥', 'Length:', query.length);
 
   if (!query) {
-    console.log('⚠️ Empty query - showing initial state');
+    mlog('⚠️', 'Empty query - show initial');
     showInitial();
-    console.log('🔥 === performGenerate END (no query) ===');
+    mlog('🔥', '=== END (no query) ===');
     return;
   }
 
-  console.log('🔥 Valid query detected, showing loading state...');
+  mlog('🔥', 'Valid query! Loading...');
   showLoading();
-  console.log('🔥 Loading state shown');
+  mlog('🔥', 'Loading shown');
 
   try {
     const preferences = { freeText: query };
     if (filterDifficulty.value) preferences.difficulty = filterDifficulty.value;
     if (filterTime.value) preferences.maxTime = parseInt(filterTime.value);
 
-    console.log('🔥 Calling API with preferences:', JSON.stringify(preferences));
-    console.log('🔥 API URL:', '/recipes/generate-public');
+    mlog('🔥', 'API call:', preferences);
+    mlog('🔥', 'URL: /recipes/generate-public');
     const data = await callAPI('/recipes/generate-public', {
       method: 'POST',
       body: JSON.stringify({ preferences })
@@ -128,21 +146,21 @@ async function performGenerate() {
 }
 
 function showInitial() {
-  console.log('🔥 showInitial() called');
+  mlog('🔥', 'showInitial()');
   hideAll();
   initialState.classList.remove('hidden');
-  console.log('🔥 Initial state now visible');
+  mlog('🔥', 'Initial visible');
 }
 
 function showLoading() {
-  console.log('🔥 showLoading() called');
+  mlog('🔥', 'showLoading()');
   hideAll();
   loadingEl.classList.remove('hidden');
-  console.log('🔥 Loading state now visible');
+  mlog('🔥', 'Loading visible');
 }
 
 function hideAll() {
-  console.log('🔥 hideAll() called - hiding all states');
+  mlog('🔥', 'hideAll()');
   initialState.classList.add('hidden');
   loadingEl.classList.add('hidden');
   errorState.classList.add('hidden');

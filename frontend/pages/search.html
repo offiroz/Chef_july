@@ -15,6 +15,9 @@
       <h1>צור מתכון עם השף</h1>
     </header>
 
+    <!-- Mobile Debug Log (visible on screen) -->
+    <div id="mobile-debug" style="position:fixed;bottom:0;left:0;right:0;max-height:200px;overflow-y:auto;background:rgba(0,0,0,0.9);color:#0f0;font-family:monospace;font-size:11px;padding:10px;z-index:9999;display:none;direction:ltr;text-align:left;"></div>
+
     <!-- Search Bar -->
     <div class="search-bar">
       <form id="search-form" class="search-form">
@@ -27,7 +30,7 @@
           maxlength="500"
         ></textarea>
         <div class="search-button-container">
-          <button type="submit" id="search-submit-btn" class="btn btn-primary search-btn" onclick="console.log('🔥 Inline onclick fired!'); return true;">צור מתכון</button>
+          <button type="submit" id="search-submit-btn" class="btn btn-primary search-btn" onclick="if(window.mlog) mlog('🔥', 'Inline onclick!'); return true;">צור מתכון</button>
         </div>
       </form>
     </div>
