@@ -35,61 +35,21 @@ if (missingElements.length > 0) {
 
   ChefAnim.init('search-anim', 'idle', 'small');
 
-  // Add explicit button handler for better mobile support
-  const submitBtn = document.getElementById('search-submit-btn');
-  let isSubmitting = false;
-
-  if (submitBtn) {
-    // Use touchstart for immediate response on mobile
-    submitBtn.addEventListener('touchstart', (e) => {
-      console.log('Button touched (touchstart)');
-      // Blur the textarea to close mobile keyboard immediately
-      if (searchInput) {
-        searchInput.blur();
-      }
-    }, { passive: true });
-
-    // Main click handler - works for both desktop and mobile
-    submitBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (isSubmitting) {
-        console.log('Already submitting, ignoring duplicate click');
-        return false;
-      }
-
-      console.log('Button clicked, generating recipe...');
-      isSubmitting = true;
-
-      // Ensure keyboard is closed
-      if (searchInput) {
-        searchInput.blur();
-      }
-
-      // Small delay to ensure keyboard closes
-      setTimeout(() => {
-        performGenerate();
-        isSubmitting = false;
-      }, 100);
-
-      return false;
-    });
-  }
-
-  // Fallback: form submit handler
-  searchForm.addEventListener('submit', (e) => {
+  // Simple, direct form submit handler
+  searchForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    e.stopPropagation();
-    console.log('Form submitted via submit event');
+    console.log('🔥 Form submit triggered');
 
-    if (!isSubmitting) {
-      if (searchInput) {
-        searchInput.blur();
-      }
-      performGenerate();
+    // Close keyboard
+    if (searchInput) {
+      searchInput.blur();
     }
-    return false;
+
+    // Wait a moment for keyboard to close
+    await new Promise(resolve => setTimeout(resolve, 150));
+
+    console.log('🔥 Calling performGenerate');
+    performGenerate();
   });
 
   // Re-generate when filters change (only if there's a query)
