@@ -44,6 +44,34 @@ if (missingElements.length > 0) {
     return false;
   });
 
+  // Add explicit button click handler for better mobile support
+  const submitBtn = document.getElementById('search-submit-btn');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Button clicked, generating recipe...');
+      // Blur the textarea to close mobile keyboard
+      if (searchInput) {
+        searchInput.blur();
+      }
+      performGenerate();
+      return false;
+    });
+
+    // Add touchend handler for better mobile responsiveness
+    submitBtn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      console.log('Button touched (touchend), generating recipe...');
+      // Blur the textarea to close mobile keyboard
+      if (searchInput) {
+        searchInput.blur();
+      }
+      performGenerate();
+      return false;
+    }, { passive: false });
+  }
+
   // Re-generate when filters change (only if there's a query)
   filterDifficulty.addEventListener('change', () => {
     if (searchInput.value.trim()) performGenerate();
